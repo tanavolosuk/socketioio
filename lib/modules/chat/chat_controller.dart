@@ -13,22 +13,33 @@ class ChatController extends GetxController {
   @override
   void onInit() {
     messages.listen((p0) async {
-      var max = scrollCtrl.position.maxScrollExtent;
-      if (scrollCtrl.offset + 100 >= max) {
-        await Future.delayed(const Duration(milliseconds: 100,), () {
-          scrollCtrl.jumpTo(scrollCtrl.position.maxScrollExtent);
-        });
+      if (scrollCtrl.hasClients) {
+        var max = scrollCtrl.position.maxScrollExtent;
+        if (scrollCtrl.offset + 100 >= max) {
+          await Future.delayed(const Duration(milliseconds: 100,), () {
+            if (scrollCtrl.hasClients) {
+              scrollCtrl.jumpTo(scrollCtrl.position.maxScrollExtent);
+            }
+          });
+        }
       }
     });
     super.onInit();
   }
 
   disconnect() => SocketService.to.disconnect();
+  
   bool itsMe(String clientId) => clientId == SocketService.to.clientId;
 
   sendMessage() {
     var message = textCtrl.text;
     if (message.isNotEmpty) SocketService.to.sendMessageToChat(message);
     textCtrl.clear();
+  }
+
+  @override
+  void onClose() {
+    scrollCtrl.dispose();
+    super.onClose();
   }
 }
