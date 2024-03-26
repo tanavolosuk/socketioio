@@ -15,8 +15,9 @@ class ChatController extends GetxController {
     messages.listen((p0) async {
       var max = scrollCtrl.position.maxScrollExtent;
       if (scrollCtrl.offset + 100 >= max) {
-        await Future.delayed(const Duration(microseconds: 300));
-        scrollCtrl.jumpTo(max);
+        await Future.delayed(const Duration(milliseconds: 100,), () {
+          scrollCtrl.jumpTo(scrollCtrl.position.maxScrollExtent);
+        });
       }
     });
     super.onInit();

@@ -34,8 +34,8 @@ class ChatPage extends GetView<ChatController> {
         children: [
           Expanded(
               child: Obx(() => ListView.builder(
-                    itemCount: controller.messages.length,
                     controller: controller.scrollCtrl,
+                    itemCount: controller.messages.length,
                     itemBuilder: (context, index) {
                       var message = controller.messages[index];
                       var itsMe = controller.itsMe(message.clientId);
