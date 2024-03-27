@@ -53,7 +53,9 @@ class ChatPage extends GetView<ChatController> {
                           return Center(
                               child: Text(
                             "${message.username} вышел из чата!",
-                            style: const TextStyle(color: AppColors.fourthPrimeryColor),
+                            style: const TextStyle(
+                                color: AppColors.fourthPrimeryColor,
+                                fontWeight: FontWeight.bold),
                           ));
                         case SocketEvent.newMessage:
                           return BubbleMessage(message: message, itsMe: itsMe);
@@ -62,12 +64,14 @@ class ChatPage extends GetView<ChatController> {
                       }
                     },
                   ))),
-          const SizedBox(),
+          const SizedBox(
+            height: 16,
+          ),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: TextFormField(
               controller: controller.textCtrl,
-              onEditingComplete: controller.sendMessage,
+              onEditingComplete: controller.sendMessage(),
               decoration: InputDecoration(
                 suffixIcon: IconButton(
                   onPressed: () => controller.sendMessage(),

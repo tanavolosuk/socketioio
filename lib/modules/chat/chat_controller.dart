@@ -16,7 +16,10 @@ class ChatController extends GetxController {
       if (scrollCtrl.hasClients) {
         var max = scrollCtrl.position.maxScrollExtent;
         if (scrollCtrl.offset + 100 >= max) {
-          await Future.delayed(const Duration(milliseconds: 100,), () {
+          await Future.delayed(
+              const Duration(
+                milliseconds: 100,
+              ), () {
             if (scrollCtrl.hasClients) {
               scrollCtrl.jumpTo(scrollCtrl.position.maxScrollExtent);
             }
@@ -27,8 +30,11 @@ class ChatController extends GetxController {
     super.onInit();
   }
 
-  disconnect() => SocketService.to.disconnect();
-  
+  void disconnect() {
+    //messages.clear();
+    SocketService.to.disconnect();
+  }
+
   bool itsMe(String clientId) => clientId == SocketService.to.clientId;
 
   sendMessage() {

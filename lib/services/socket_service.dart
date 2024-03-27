@@ -7,7 +7,7 @@ import 'package:socketioio/services/user_service.dart';
 
 class SocketService extends GetxService {
   static SocketService get to => Get.find();
-  late Socket _socket;
+  late Socket _socket; //переменная, которая хранит само подключение
 
   Future<SocketService> init() async {
     _socket = io(
@@ -26,8 +26,8 @@ class SocketService extends GetxService {
     });
 
     _socket.onDisconnect((data) {
-      printInfo(info: 'Socket disconnected');
       UserService.to.clearMessage();
+      printInfo(info: 'Socket disconnected');
       Get.offNamed(Routes.HOME);
       });
     _socket
@@ -51,9 +51,10 @@ class SocketService extends GetxService {
     _socket.connect();
   }
 
-  void disconnect() {
+  void disconnect() async{
     //отключение
     _sendLogoutMessage();
+    await Future.delayed(const Duration(seconds: 2)); //TODO костыль
     _socket.disconnect();
   }
 
