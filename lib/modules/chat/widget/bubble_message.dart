@@ -14,8 +14,8 @@ class BubbleMessage extends StatelessWidget {
     return Align(
       alignment: itsMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          padding: const EdgeInsets.all(10),
+          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+          padding: const EdgeInsets.all(9),
           decoration: BoxDecoration(
               color: itsMe
                   ? AppColors.thirdPrimeryColor
@@ -24,8 +24,22 @@ class BubbleMessage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (!itsMe) Text(message.username),
-              (() { //функция вызывает саму себя
+              Text(message.getTime,
+                  style: TextStyle(
+                      color: itsMe ? Colors.black : AppColors.firstPrimeryColor,
+                      fontSize: 10)),
+              if (!itsMe)
+                Text(
+                  message.username,
+                  style: const TextStyle(
+                      color: AppColors.firstPrimeryColor,
+                      fontWeight: FontWeight.bold),
+                ),
+              const SizedBox(
+                height: 10,
+              ),
+              (() {
+                //функция вызывает саму себя
                 if (message.type == SocketEvent.newImageMessage) {
                   return Image.memory(
                     message.getImage,
@@ -36,9 +50,13 @@ class BubbleMessage extends StatelessWidget {
                         const Text('Error image'),
                   );
                 }
-                return Text(message.message);
+                return Text(message.message,
+                    style: TextStyle(
+                        color: itsMe
+                            ? Colors.black
+                            : AppColors.firstPrimeryColor));
               })(),
-              Text(message.getTime, style: const TextStyle(fontSize: 10)),
+              // Text(message.getTime, style: const TextStyle(fontSize: 10)),
             ],
           )),
     );

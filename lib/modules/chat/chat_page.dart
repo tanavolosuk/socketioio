@@ -19,11 +19,17 @@ class ChatPage extends GetView<ChatController> {
         title: Obx(
           () => Column(
             children: [
-              const Text('Чат'),
+              const Text(
+                'Чат',
+                style: TextStyle(
+                    color: AppColors.firstPrimeryColor,
+                    fontWeight: FontWeight.bold),
+              ),
               if (controller.typingUsers.isNotEmpty)
                 Text(
                   '${controller.typingUsers.join(',')} печатает${controller.stringAnimation.padRight(3)}',
-                  style: const TextStyle(fontSize: 10),
+                  style: const TextStyle(
+                      fontSize: 12, color: AppColors.firstPrimeryColor),
                 )
             ],
           ),
@@ -102,13 +108,20 @@ class ChatPage extends GetView<ChatController> {
                           controller.sendImageMessage(data);
                         }
                       },
-                      icon: const Icon(Icons.attach_file),
+                      icon: const Icon(
+                        Icons.crop_original,
+                        color: AppColors.secondPrimeryColor,
+                        size: 30,
+                      ),
                     ),
                     IconButton(
                       onPressed: () {
                         controller.sendMessage();
                       },
-                      icon: const Icon(Icons.send),
+                      icon: const Icon(
+                        Icons.send,
+                        color: AppColors.secondPrimeryColor,
+                      ),
                     ),
                   ],
                 ),
