@@ -54,7 +54,7 @@ class SocketService extends GetxService {
   void disconnect() async{
     //отключение
     _sendLogoutMessage();
-    await Future.delayed(const Duration(seconds: 2)); //TODO костыль
+    await Future.delayed(const Duration(seconds: 1)); //TODO костыль
     _socket.disconnect();
   }
 

@@ -25,7 +25,7 @@ class BubbleMessage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (!itsMe) Text(message.username),
-              (() {
+              (() { //функция вызывает саму себя
                 if (message.type == SocketEvent.newImageMessage) {
                   return Image.memory(
                     message.getImage,

@@ -21,7 +21,7 @@ class ChatMessage with _$ChatMessage {
   }) = _ChatMessage;
 
   String get getTime {
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(this.date, isUtc: true);
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(this.date);
     DateTime today = DateTime.now();
     String format = 'kk:mm';
     if(date.day != today.day) {
