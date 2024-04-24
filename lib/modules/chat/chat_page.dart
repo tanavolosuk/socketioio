@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socketioio/core/colors.dart';
 import 'package:socketioio/data/socket_events.dart';
 import 'package:socketioio/modules/chat/widget/bubble_message.dart';
 import 'chat_controller.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ChatPage extends GetView<ChatController> {
   const ChatPage({Key? key}) : super(key: key);
@@ -13,10 +16,17 @@ class ChatPage extends GetView<ChatController> {
     return Scaffold(
       backgroundColor: AppColors.firstPrimeryColor,
       appBar: AppBar(
-        title: const Text(
-          'Чат',
-          style: TextStyle(
-              color: AppColors.firstPrimeryColor, fontWeight: FontWeight.bold),
+        title: Obx(
+          () => Column(
+            children: [
+              const Text('Чат'),
+              if (controller.typingUsers.isNotEmpty)
+                Text(
+                  '${controller.typingUsers.join(',')} печатает${controller.stringAnimation.padRight(3)}',
+                  style: const TextStyle(fontSize: 10),
+                )
+            ],
+          ),
         ),
         backgroundColor: AppColors.secondPrimeryColor,
         actions: [
@@ -57,7 +67,8 @@ class ChatPage extends GetView<ChatController> {
                                 color: AppColors.fourthPrimeryColor,
                                 fontWeight: FontWeight.bold),
                           ));
-                        case SocketEvent.newMessage:
+                        case SocketEvent.newMessage ||
+                              SocketEvent.newImageMessage:
                           return BubbleMessage(message: message, itsMe: itsMe);
                         default:
                           return const SizedBox();
@@ -71,14 +82,35 @@ class ChatPage extends GetView<ChatController> {
             padding: const EdgeInsets.all(20.0),
             child: TextFormField(
               controller: controller.textCtrl,
-              onEditingComplete: controller.sendMessage(),
+              onFieldSubmitted: (value) {
+                controller.sendMessage();
+              },
+              onChanged: (value) => controller.typingStart(value),
+              onTapOutside: (event) => controller.typingStop(),
               decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  onPressed: () => controller.sendMessage(),
-                  icon: const Icon(
-                    Icons.send,
-                    color: AppColors.secondPrimeryColor,
-                  ),
+                suffixIcon: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      onPressed: () async {
+                        final ImagePicker picker = ImagePicker();
+                        final XFile? image =
+                            await picker.pickImage(source: ImageSource.gallery);
+                        if (image != null) {
+                          var data = base64Encode(await image.readAsBytes());
+                          controller.sendImageMessage(data);
+                        }
+                      },
+                      icon: const Icon(Icons.attach_file),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        controller.sendMessage();
+                      },
+                      icon: const Icon(Icons.send),
+                    ),
+                  ],
                 ),
                 border: const OutlineInputBorder(),
               ),

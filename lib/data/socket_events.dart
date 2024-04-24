@@ -1,6 +1,9 @@
 enum SocketEvent {
-  unknow, //для того чтобы строки были каких-то определнных значений. Сервер принимает только эти значения
+  unknow,
   login,
   logout,
   newMessage,
+  newImageMessage,
+  typingStart,
+  typingStop,
 }

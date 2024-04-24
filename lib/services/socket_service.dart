@@ -69,4 +69,16 @@ class SocketService extends GetxService {
   void sendMessageToChat(String message) {
     _socket.emit(SocketEvent.newMessage.name, message);
   }
+
+  void sendImageMessage(String file) {
+    _socket.emit(SocketEvent.newImageMessage.name, file);
+  }
+
+  void sendTypingStart() {
+    _socket.emit(SocketEvent.typingStart.name);
+  }
+
+  void sendTypingStop() {
+    _socket.emit(SocketEvent.typingStop.name);
+  }
 }
